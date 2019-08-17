@@ -1,0 +1,24 @@
+<form action="/log_out" method="POST">
+  <input type="submit" style="width: 90px; float: right; margin: 10px 10px 0 0;" id="log_out" class="btn btn-dark" value="Log out"/>
+</form>
+<h1>Hello, Ryama's Board!</h1>
+
+<form action="/post" method="POST">
+  <label for="content">content</label><br>
+  <textarea style="margin-left: 20px;" rows="3" cols="50" name="content" id="content"></textarea><br>
+  <input type="submit" style="width: 90px; margin: 10px 10px 0 0;" id="post" class="btn btn-info" value="POST"/>
+</form>
+
+<h2>Posts</h2>
+<% @posts.each do |post| %>
+  <div class="card" style="width: 600px; margin: 10px;">
+    <div class="card-body">
+      <div class="card-title">
+        <%= post["name"] %> [<%= post["timestamp"] %>]
+      </div>
+      <div class="card-text" style="padding: 15px;">
+        <%= post["content"] %>
+      </div>
+    </div>
+  </div>
+<% end %>
