@@ -2,6 +2,7 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'pg'
 require 'sinatra/cookies'
+require 'pry'
 enable :sessions
 
 client = PG::connect(
@@ -22,15 +23,6 @@ get '/index' do
     redirect '/'
   end
 
-  # sql = """
-  #   SELECT users.name, content, timestamp
-  #   FROM posts
-  #   JOIN users
-  #   ON user_id = users.id
-  #   ORDER BY timestamp DESC;
-  # """
-  # @posts = client.exec_params(sql)
-
   erb :index
 end
 
@@ -47,7 +39,7 @@ post '/post' do
 end
 
 get '/sign_up' do
-  if session[:user] != nil
+  if logged_in?
     redirect '/index'
   end
 
@@ -66,11 +58,11 @@ post '/sign_up' do
   id = client.exec_params('SELECT id FROM users WHERE email = $1 AND password = $2;', [email, password])[0]["id"]
 
   set_user(id, name, email)
-  redirect '/'
+  redirect '/index'
 end
 
 get '/sign_in' do
-  if session[:user] != nil
+  if logged_in?
     redirect '/index'
   end
 
@@ -109,3 +101,53 @@ get '/sign_out' do
   redirect '/'
 end
 
+get '/setting' do
+  unless logged_in?
+    redirect '/'
+  end
+  
+  sql = """
+  SELECT * FROM users_contents
+  JOIN contents ON content_id = contents.id
+  WHERE user_id = $1;
+  """
+  @contents = client.exec_params(sql, [session[:user][:id]])
+  erb :setting
+end
+
+post '/add' do
+  content = params["name"].gsub(" ", "").gsub("　", "")
+  sql = "SELECT * FROM contents WHERE name = $1;"
+  contents = client.exec_params(sql, [content])
+  if not content.empty? and contents.ntuples == 0
+    insert_sql = "INSERT INTO contents (name) values ($1);"
+    client.exec_params(insert_sql, [params["name"]])
+    contents = client.exec_params(sql, [content])
+  end
+
+  sql = """
+  SELECT * FROM users_contents
+  JOIN contents ON content_id = contents.id
+  WHERE user_id = $1 AND contents.name = $2;
+  """
+  users_content = client.exec_params(sql, [session[:user][:id], content])
+  if users_content.ntuples == 0
+    sql = """
+    INSERT INTO users_contents (user_id, content_id)
+    VALUES ($1, $2);
+    """
+    client.exec_params(sql, [session[:user][:id], contents[0]["id"]])
+  end
+
+  redirect '/setting'
+end
+
+post '/delete' do
+  content_id = params["id"]
+  sql = """
+  DELETE FROM users_contents
+  WHERE user_id = $1 AND content_id = $2;
+  """
+  client.exec_params(sql, [session[:user][:id], content_id])
+  redirect '/setting'
+end

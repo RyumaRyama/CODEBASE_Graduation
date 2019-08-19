@@ -1,8 +1,8 @@
 <html>
   <head>
-    <title>Ryama's board</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>がくろぐ</title>
     <link rel="stylesheet" href="css/stylesheet.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   <header>
   </header>
@@ -12,11 +12,20 @@
     </button>
 
     <div class="collapse navbar-collapse" id="bs-navi">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a class="nav-link" href="/">Top</a></li>
+      </ul>
+      <ul class="navbar-nav">
         <% if logged_in? %>
-          <li class="nav-item"><a class="nav-link" href="/edit">Setting</a></li>
-          <li class="nav-item"><a class="nav-link" href="/sign_out">Sign out</a></li>
+          <div class="nav-item">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+              <%= session[:user][:name] %>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="/setting">Setting</a>
+              <a class="dropdown-item" href="/sign_out">Sign out</a>
+            </div>
+          </li>
         <% else %>
           <li class="nav-item"><a class="nav-link" href="/sign_in">Sign in</a></li>
           <li class="nav-item"><a class="nav-link" href="/sign_up">Sign up</a></li>
