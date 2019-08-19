@@ -7,7 +7,7 @@ enable :sessions
 client = PG::connect(
   :host => "localhost",
   :user => 'ryama', :password => '',
-  :dbname => "ryamas_board")
+  :dbname => "cb_graduation")
 
 get '/' do
   if logged_in?
@@ -22,14 +22,14 @@ get '/index' do
     redirect '/'
   end
 
-  sql = """
-    SELECT users.name, content, timestamp
-    FROM posts
-    JOIN users
-    ON user_id = users.id
-    ORDER BY timestamp DESC;
-  """
-  @posts = client.exec_params(sql)
+  # sql = """
+  #   SELECT users.name, content, timestamp
+  #   FROM posts
+  #   JOIN users
+  #   ON user_id = users.id
+  #   ORDER BY timestamp DESC;
+  # """
+  # @posts = client.exec_params(sql)
 
   erb :index
 end
@@ -69,21 +69,21 @@ post '/sign_up' do
   redirect '/'
 end
 
-get '/log_in' do
+get '/sign_in' do
   if session[:user] != nil
     redirect '/index'
   end
 
-  erb :log_in
+  erb :sign_in
 end
 
-post '/log_in' do
+post '/sign_in' do
   email = params[:email]
   password = Digest::SHA256.new.update(params[:password]).hexdigest
   sql = "SELECT * FROM users WHERE email = $1 AND password = $2"
 
   if client.exec_params(sql, [email, password]).ntuples == 0
-    redirect '/log_in'
+    redirect '/sign_in'
   end
 
   user = client.exec_params(sql, [email, password])[0]
@@ -104,7 +104,7 @@ def set_user(id, name, email)
   }
 end
 
-post '/log_out' do
+get '/sign_out' do
   session[:user] = nil
   redirect '/'
 end
