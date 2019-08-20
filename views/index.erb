@@ -1,2 +1,56 @@
-<h1>Hello, World!</h1>
+<div class="graph">
+  <div class="chart">
+    <canvas id="chart" height="450" width="600"></canvas>
+  </div>
+  <div class="other">
+    <div class="total">
+      <p><span class="total_count" data-num="<%= @total %>">0</span>h</p>
+    </div>
+    <div class="input_form">
+    </div>
+  </div>
+</div>
 
+<script type="text/javascript" src="/js/graph.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+<script>
+  var ctx = document.getElementById('chart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: <%= @contents.map { |content| content["name"] } %>,
+      datasets: [{
+        backgroundColor: 'rgba(255, 110, 0, 0.4)',
+        borderColor: "rgba(255,110,0,0.6)",
+        data : <%= @contents.map { |content| content["counter"] } %>
+      }]
+    },
+    options: {
+      scale: {
+        display: true,
+        pointLabels: {
+          fontSize: 17,
+        },
+        ticks: {
+          display: false,
+          fontSize: 12,
+          beginAtZero: true
+        },
+        gridLines: {
+          display: true,
+        }
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem, data) {
+            return data.datasets[0].data[tooltipItem.index];
+          }
+        },
+        displayColors: false
+      }
+    }
+  });
+</script>

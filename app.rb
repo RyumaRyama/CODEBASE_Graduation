@@ -23,6 +23,11 @@ get '/index' do
     redirect '/'
   end
 
+  @contents = get_contents(client)
+  @total = 0
+  @contents.each do |content|
+    @total += content["counter"].to_i
+  end
   erb :index
 end
 
@@ -105,13 +110,8 @@ get '/setting' do
   unless logged_in?
     redirect '/'
   end
-  
-  sql = """
-  SELECT * FROM users_contents
-  JOIN contents ON content_id = contents.id
-  WHERE user_id = $1;
-  """
-  @contents = client.exec_params(sql, [session[:user][:id]])
+
+  @contents = get_contents(client)
   erb :setting
 end
 
@@ -150,4 +150,13 @@ post '/delete' do
   """
   client.exec_params(sql, [session[:user][:id], content_id])
   redirect '/setting'
+end
+
+def get_contents(client)
+  sql = """
+  SELECT * FROM users_contents
+  JOIN contents ON content_id = contents.id
+  WHERE user_id = $1;
+  """
+  client.exec_params(sql, [session[:user][:id]])
 end
