@@ -1,12 +1,29 @@
-<div class="graph">
-  <div class="chart">
-    <canvas id="chart" height="450" width="600"></canvas>
-  </div>
-  <div class="other">
-    <div class="total">
-      <p><span class="total_count" data-num="<%= @total %>">0</span>h</p>
+<div class="graph container">
+  <div class="row">
+    <div class="chart col-md-7 col-sm-12">
+      <canvas id="chart" height="450" width="600"></canvas>
     </div>
-    <div class="input_form">
+    <div class="other col-md-5 col-sm-12">
+      <div class="container">
+        <div class="row">
+          <div class="total col">
+            <h2>Total</h2>
+            <p><span class="total_count" data-num="<%= @total %>">0</span> hour</p>
+          </div>
+        </div>
+        <div class="row">
+          <form class="input_form" method="POST" action="/input">
+            <select class="col-5" name="id" id="id">
+              <option value="" label="" selected/>
+              <% @contents.each do |content| %>
+                <option value="<%= content["id"] %>"><%= content["name"] %></option>
+              <% end %>
+            </select>
+            <input class="col-3" type="number" name="time" id="time">
+            <input class="col-3" type="submit" id="time_input" value="Input">
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>

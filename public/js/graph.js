@@ -1,13 +1,13 @@
 window.onload = function onLoad() {
     var countElm = $('.total_count'),
-    countSpeed = 1;
+    countSpeed = 20;
  
     countElm.each(function(){
         var self = $(this),
         countMax = self.attr('data-num'),
         thisCount = self.text(),
         countTimer;
-        const countUp = parseInt(self.attr('data-num')/100) + 1;
+        const countUp = parseInt(self.attr('data-num')/1000) + 1;
  
         function timer(){
             countTimer = setInterval(function(){

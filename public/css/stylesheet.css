@@ -2,7 +2,27 @@
   font-family: 'arial unicode ms';
 }
 
-/* body .top .title { */
-/*   width: 300px; */
-/*   padding: 150px 0 100px 0; */
-/* } */
+.graph {
+  margin: 0 10%;
+  padding-top: 50px;
+}
+
+.total_count {
+  color: red;
+  text-align: center;
+}
+
+.total {
+  padding-top: 100px;
+}
+
+.total p {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 50px;
+}
+
+.input_form {
+  margin: 100px auto;
+}
+
