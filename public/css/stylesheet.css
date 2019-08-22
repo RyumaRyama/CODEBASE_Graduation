@@ -26,3 +26,14 @@
   margin: 100px auto;
 }
 
+.setting {
+  padding: 50px 20%;
+}
+
+.setting_form {
+  padding: 30px 10%;
+}
+
+.setting_form form {
+  margin-bottom: 30px;
+}

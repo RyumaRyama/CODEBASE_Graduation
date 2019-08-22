@@ -225,6 +225,13 @@ get '/get_tweet' do
   redirect '/index'
 end
 
+post '/edit_name' do
+  sql = "UPDATE users SET name = $1 WHERE id = $2"
+  client.exec_params(sql, [params["name"], session[:user][:id]])
+  session[:user][:name] = params["name"]
+  redirect '/setting'
+end
+
 
 
 class TweetData

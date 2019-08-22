@@ -1,13 +1,11 @@
 <div class="setting">
   <h1>学習内容の設定</h1>
-  <div class="add">
+  <div class="setting_form">
     <h2>追加</h2>
     <form method="POST" action="/add">
       <input type="text" name="name" id="name">
       <input type="submit" value="Add">
     </form>
-  </div>
-  <div class="delete">
     <h2>削除</h2>
     <form method="POST" action="/delete">
       <select name="id" id="id">
@@ -17,6 +15,11 @@
         <% end %>
       </select>
       <input type="submit" value="Delete">
+    </form>
+    <h2>ユーザー名変更</h2>
+    <form method="POST" action="/edit_name">
+      <input type="text" name="name" id="name">
+      <input type="submit" value="Edit">
     </form>
   </div>
 </div>
